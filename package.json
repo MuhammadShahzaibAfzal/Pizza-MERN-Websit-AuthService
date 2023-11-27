@@ -4,11 +4,15 @@
   "description": "A user management service",
   "main": "index.js",
   "scripts": {
-    "dev" : "node src/server.js"
+    "dev": "node src/server.js"
   },
   "keywords": [
     "auth-service"
   ],
   "author": "Shahzaib Afzal",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2"
+  }
 }
