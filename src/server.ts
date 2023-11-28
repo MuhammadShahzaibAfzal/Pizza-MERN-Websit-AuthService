@@ -1,9 +1,3 @@
-function login(userName: string, password: string): boolean {
-  return userName === "admin" && password === "secret";
-}
+// import { Config } from "./config";
 
-if (login("admin", "secret")) {
-  // console.log("Login Successfully");
-} else {
-  // console.log("Invalid credentials!");
-}
+// console.log(Config.NODE_ENV);
