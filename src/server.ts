@@ -1,4 +1,5 @@
-function login(userName: string, password: string): boolean {return userName === "admin" && password === "secret";
+function login(userName: string, password: string): boolean {
+  return userName === "admin" && password === "secret";
 }
 
 if (login("admin", "secret")) {
