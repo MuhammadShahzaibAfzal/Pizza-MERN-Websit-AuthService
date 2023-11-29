@@ -6,11 +6,10 @@ import { HttpError } from "http-errors";
 const app = express();
 
 app.get("/", async (req, res) => {
-  return res.send("Hello World");
+  return res.send("Pizza App : Auth Service 🚀🚀. Now check again");
 });
 
 /* GLOBAL ERROR HANDLWER MIDDLEWARE */
-
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
   logger.error(err.message);
   const statusCode = err.statusCode || 500;
