@@ -17,5 +17,8 @@ module.exports = {
   //   custom rules
   rules: {
     "no-console": "error",
+    "@typescript-eslint/no-misused-promises": "off",
+    "require-await": "off",
+    "@typescript-eslint/require-await": "off",
   },
 };
