@@ -6,7 +6,7 @@ import { HttpError } from "http-errors";
 const app = express();
 
 app.get("/", async (req, res) => {
-  return res.send("Hello WOrld");
+  return res.send("Hello World");
 });
 
 /* GLOBAL ERROR HANDLWER MIDDLEWARE */
