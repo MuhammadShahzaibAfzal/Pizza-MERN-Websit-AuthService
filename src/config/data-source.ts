@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "../entity/User";
 import { Config } from ".";
+import { User } from "../entity/User";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -13,6 +13,7 @@ export const AppDataSource = new DataSource({
   // Don't use in Production, synchronize should be false in production
   synchronize: Config.NODE_ENV === "test" || Config.NODE_ENV === "dev",
   logging: false,
+  // entities: [User],
   entities: [User],
   migrations: [],
   subscribers: [],
