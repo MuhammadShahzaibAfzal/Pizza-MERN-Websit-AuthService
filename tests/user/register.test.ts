@@ -3,7 +3,6 @@ import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
-import { truncateTables } from "../utils";
 
 describe("POST  /auth/register", () => {
   let connection: DataSource;
@@ -14,7 +13,8 @@ describe("POST  /auth/register", () => {
 
   beforeEach(async () => {
     // database truncate
-    await truncateTables(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
   });
 
   afterAll(async () => {
@@ -63,16 +63,53 @@ describe("POST  /auth/register", () => {
       await request(app).post("/auth/register").send(userData);
       // Assert
       const userRepositary = connection.getRepository(User);
-
       const users = await userRepositary.find();
       // console.log(users);
 
       expect(users).toHaveLength(1);
-      expect(users[0].firstName).toBe(userData.firstName);
-      expect(users[0].lastName).toBe(userData.lastName);
-      expect(users[0].email).toBe(userData.email);
+      const user = users[0];
+      expect(user.firstName).toBe(userData.firstName);
+      expect(user.lastName).toBe(userData.lastName);
+      expect(user.email).toBe(userData.email);
+    });
+
+    it("should stored password into hash form into db", async () => {
+      // Arrange
+      const userData = {
+        firstName: "John",
+        lastName: "Doe",
+        email: "johndoe@gmail.com",
+        password: "secret",
+      };
+      // Act
+      await request(app).post("/auth/register").send(userData);
+      const userRepositary = connection.getRepository(User);
+      const users = await userRepositary.find();
+      const user = users[0];
+      // Assert
+      expect(user.password).not.toBe(userData.password);
+      expect(user.password).toHaveLength(60); // hash is 60 charecters long
+      // $[algorithm]$[cost]$[salt][hash] see more details on bcrypt docmentation
+      expect(user.password).toMatch(/^\$2b\$\d{2}\$/);
     });
   });
 
-  describe("Fields are missing", () => {});
+  describe("Fields are missing", () => {
+    it("should return 400 status code when email is not given", async () => {
+      // Arrange
+      const userData = {
+        firstName: "John",
+        lastName: "Doe",
+        password: "secret",
+      };
+      //  Act
+      const response = await request(app).post("/auth/register").send(userData);
+      const userRepositary = connection.getRepository(User);
+      const users = await userRepositary.find();
+      //  Assert
+      expect(response.statusCode).toBe(400);
+      // Also check user is not saved
+      expect(users).toHaveLength(0);
+    });
+  });
 });

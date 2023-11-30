@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express";
 import { RegisterUserRequest } from "../types";
 import { UserService } from "../services/UserService";
 import { Logger } from "winston";
+import createHttpError from "http-errors";
 
 export class AuthController {
   constructor(
@@ -16,6 +17,11 @@ export class AuthController {
       email,
       password: "********",
     });
+    if (!email) {
+      const err = createHttpError(400, "Email is required !");
+      next(err);
+      return;
+    }
     try {
       const user = await this.userService.create({
         firstName,
